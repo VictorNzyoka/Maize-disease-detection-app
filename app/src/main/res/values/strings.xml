@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">maizeDisease</string>
+    <string name="blight">MANCO-FLO® 455SC </string>
+    <string name="common_rust">Mancozeb </string>
+    <string name="gray_leaf_spot">Amistartop SC</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+</resources>
