@@ -111,7 +111,13 @@ public class RegisterPage extends AppCompatActivity {
         String username = usernameEditText.getText().toString().trim();
         String phoneNumber = phoneNumberEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
-        String userType = farmerRadioButton.isChecked() ? "farmer" : "officer";
+        String userType = farmerRadioButton.isChecked() ? "farmer" : officerRadioButton.isChecked() ? "officer" : null;
+
+        // Check if user type is selected
+        if (userType == null) {
+            Toast.makeText(RegisterPage.this, "Please select user type", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Create user account in Firebase Authentication
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -122,42 +128,58 @@ public class RegisterPage extends AppCompatActivity {
                         Log.d(TAG, "User registered successfully: " + userId);
                         Toast.makeText(RegisterPage.this, "Registration successful", Toast.LENGTH_SHORT).show();
 
-                        // Store data in the appropriate node based on user type
-                        if (userType.equals("farmer")) {
-                            DatabaseReference newFarmerRef = farmersRef.child(userId);
-                            newFarmerRef.child("email").setValue(email);
-                            newFarmerRef.child("username").setValue(username);
-                            newFarmerRef.child("phoneNumber").setValue(phoneNumber);
-                            // Store additional farmer-specific data as needed
-                        } else {
-                            DatabaseReference newOfficerRef = officersRef.child(userId);
-                            newOfficerRef.child("email").setValue(email);
-                            newOfficerRef.child("username").setValue(username);
-                            newOfficerRef.child("phoneNumber").setValue(phoneNumber);
-                            // Store additional officer-specific data as needed
-                        }
+                        // Store user data in Firebase Realtime Database
+                        RegistrationModel registrationModel = new RegistrationModel(userId, username, email, phoneNumber, userType, password);
+                        storeUserData(registrationModel);
                     } else {
                         // User registration failed
-                        try {
-                            throw task.getException();
-                        } catch (FirebaseAuthWeakPasswordException e) {
-                            passwordEditText.setError("Weak password");
-                            passwordEditText.requestFocus();
-                        } catch (FirebaseAuthInvalidCredentialsException e) {
-                            emailEditText.setError("Invalid email");
-                            emailEditText.requestFocus();
-                        } catch (FirebaseAuthUserCollisionException e) {
-                            // This user already exists, handle appropriately
-                            Toast.makeText(RegisterPage.this, "User already exists", Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            // Log the exception and stack trace
-                            Log.e(TAG, "Registration failed", e);
-
-                            // Display an error message
-                            Toast.makeText(RegisterPage.this, "Registration failed: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        handleRegistrationFailure(task.getException());
                     }
                 });
+    }
+
+    private void storeUserData(RegistrationModel registrationModel) {
+        String userId = registrationModel.getUserId();
+        String userType = registrationModel.getUserType();
+
+        DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
+        UserModel userModel = new UserModel(userId, registrationModel.getUsername(), registrationModel.getEmail(), registrationModel.getPhoneNumber(), userType);
+
+        userRef.setValue(userModel).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "User data stored successfully");
+            } else {
+                Log.e(TAG, "Failed to store user data", task.getException());
+            }
+        });
+
+        // Store user data under farmers or officers node based on userType
+        if (userType.equals("farmer")) {
+            farmersRef.child(userId).setValue(userModel);
+        } else {
+            officersRef.child(userId).setValue(userModel);
+        }
+    }
+
+    private void handleRegistrationFailure(Exception exception) {
+        try {
+            throw exception;
+        } catch (FirebaseAuthWeakPasswordException e) {
+            passwordEditText.setError("Weak password");
+            passwordEditText.requestFocus();
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            emailEditText.setError("Invalid email");
+            emailEditText.requestFocus();
+        } catch (FirebaseAuthUserCollisionException e) {
+            // This user already exists, handle appropriately
+            Toast.makeText(RegisterPage.this, "User already exists", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            // Log the exception and stack trace
+            Log.e(TAG, "Registration failed", e);
+
+            // Display an error message
+            Toast.makeText(RegisterPage.this, "Registration failed: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

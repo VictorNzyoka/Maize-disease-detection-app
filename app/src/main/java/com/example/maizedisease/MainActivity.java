@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final int MAX_IMAGE_SIZE = 1024 * 1024; // 1 MB
 
-    private ImageView imageView;
+    private ImageView imageView,message;
     private TextView resultTextView;
     private Button predictButton;
     private Bitmap imageBitmap;
@@ -53,12 +53,14 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         resultTextView = findViewById(R.id.outputTextView);
         predictButton = findViewById(R.id.predictButton);
+        message = findViewById(R.id.message);
 
         Button uploadButton = findViewById(R.id.button);
         predictButton.setEnabled(false);
 
         uploadButton.setOnClickListener(v -> pickImage());
         predictButton.setOnClickListener(v -> predictDisease());
+        message.setOnClickListener(v -> messaging());
 
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -231,5 +233,9 @@ public class MainActivity extends AppCompatActivity {
             resultTextView.setText("Error predicting disease: " + e.getMessage());
             Log.e(TAG, "Error predicting disease", e);
         });
+    }
+    private void messaging(){
+        Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+        startActivity(intent);
     }
 }
