@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,11 +34,11 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final float CONFIDENCE_THRESHOLD = 0.60f;
+    private static final float CONFIDENCE_THRESHOLD = 0.90f;
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final int MAX_IMAGE_SIZE = 1024 * 1024; // 1 MB
 
-    private ImageView imageView,message;
+    private ImageView imageView,message,backButton, logoutButton;
     private TextView resultTextView;
     private Button predictButton;
     private Bitmap imageBitmap;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         resultTextView = findViewById(R.id.outputTextView);
         predictButton = findViewById(R.id.predictButton);
         message = findViewById(R.id.message);
+        backButton = findViewById(R.id.back_button);
+        logoutButton = findViewById(R.id.logout_button);
 
         Button uploadButton = findViewById(R.id.button);
         predictButton.setEnabled(false);
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(v -> pickImage());
         predictButton.setOnClickListener(v -> predictDisease());
         message.setOnClickListener(v -> messaging());
+        backButton.setOnClickListener(v ->onBack());
+        logoutButton.setOnClickListener(v ->logout());
 
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -132,23 +137,22 @@ public class MainActivity extends AppCompatActivity {
                             ArrayList<FungicideModel> fungicideList = new ArrayList<>();
                             switch (outputLabel) {
                                 case "Blight":
-                                    fungicideList.add(new FungicideModel(R.drawable.blight, getString(R.string.blight)));
+                                    fungicideList.add(new FungicideModel(R.drawable.blight, getString(R.string.blight), getString(R.string.mancoflo_esc)));
                                     break;
                                 case "Common Rust":
-                                    fungicideList.add(new FungicideModel(R.drawable.rust, getString(R.string.common_rust)));
+                                    fungicideList.add(new FungicideModel(R.drawable.spot, getString(R.string.common_rust), getString(R.string.amistartop)));
                                     break;
                                 case "Gray Leaf Spot":
-                                    fungicideList.add(new FungicideModel(R.drawable.spot, getString(R.string.gray_leaf_spot)));
+                                    fungicideList.add(new FungicideModel(R.drawable.spot, getString(R.string.gray_leaf_spot), getString(R.string.amistartop)));
                                     break;
                             }
-
                             // Start ResultsActivity with prediction result and fungicide recommendations
                             Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
                             intent.putExtra("ResultActivity", outputLabel);
                             intent.putParcelableArrayListExtra("fungicideList", fungicideList);
                             startActivity(intent);
                         } else {
-                            resultTextView.setText("Low confidence prediction. Please try again with a different image.");
+                            resultTextView.setText("Please try again with a different image.");
                         }
                     });
                 } catch (Exception e) {
@@ -236,6 +240,15 @@ public class MainActivity extends AppCompatActivity {
     }
     private void messaging(){
         Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+        startActivity(intent);
+    }
+
+    private void logout() {
+        Intent intent = new Intent(MainActivity.this, SignIn.class);
+        startActivity(intent);
+    }
+    public void onBack() {
+        Intent intent = new Intent(MainActivity.this, SignIn.class);
         startActivity(intent);
     }
 }

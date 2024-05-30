@@ -30,6 +30,7 @@ public class FungicideAdapter extends RecyclerView.Adapter<FungicideAdapter.Fung
         FungicideModel fungicide = fungicideList.get(position);
         holder.fungicideNameTextView.setText(fungicide.getName());
         holder.fungicideImageView.setImageResource(fungicide.getImageResource());
+        holder.fungicideDescriptionTextView.setText(fungicide.getDescription());
     }
 
     @Override
@@ -40,11 +41,13 @@ public class FungicideAdapter extends RecyclerView.Adapter<FungicideAdapter.Fung
     static class FungicideViewHolder extends RecyclerView.ViewHolder {
         ImageView fungicideImageView;
         TextView fungicideNameTextView;
+        TextView fungicideDescriptionTextView;
 
         FungicideViewHolder(@NonNull View itemView) {
             super(itemView);
             fungicideImageView = itemView.findViewById(R.id.fungicideImageView);
             fungicideNameTextView = itemView.findViewById(R.id.fungicideNameTextView);
+            fungicideDescriptionTextView = itemView.findViewById(R.id.fungicideDescriptionTextView);
         }
     }
 }

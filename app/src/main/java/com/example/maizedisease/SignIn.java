@@ -76,7 +76,7 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void checkUserType(String userId) {
-        DatabaseReference farmersRef = firebaseDatabase.getReference("farmers");
+        DatabaseReference farmersRef = firebaseDatabase.getReference("users");
 
         farmersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -101,7 +101,7 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void checkOfficerType(String userId) {
-        DatabaseReference officersRef = firebaseDatabase.getReference("officers");
+        DatabaseReference officersRef = firebaseDatabase.getReference("users");
         officersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -135,6 +135,6 @@ public class SignIn extends AppCompatActivity {
             return;
         }
         startActivity(intent);
-        finish(); // Optional: Finish the current activity
+        finish();
     }
 }

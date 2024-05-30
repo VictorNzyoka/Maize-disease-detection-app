@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">maizeDisease</string>
     <string name="blight">MANCO-FLO® 455SC </string>
-    <string name="common_rust">Mancozeb </string>
+    <string name="common_rust">Amistartop Sc</string>
     <string name="gray_leaf_spot">Amistartop SC</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-
+    <string name="back_button_desc">Navigate back</string>
+    <string name="logout_button_desc">Log out of the application</string>
+    <string name="mancoflo_esc"> A convenient liquid fungicide suspension containing mancozeb as an active ingredient,suitable for various crops, and available in different pack sizes for easy application.</string>
+    <string name="amistartop">A Fungicide for the control of Grey Leaf Spot, Leaf Blight and Common Rust in Maize.</string>
 </resources>

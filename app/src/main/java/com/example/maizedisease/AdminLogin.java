@@ -40,7 +40,7 @@ public class AdminLogin extends AppCompatActivity {
                 // Check if the entered email and password match the admin credentials
                 if (email.equals("admin18@gmail.com") && password.equals("victor123")) {
                     // Redirect to the RegisterPage class
-                    Intent intent = new Intent(AdminLogin.this, RegisterPage.class);
+                    Intent intent = new Intent(AdminLogin.this, AdminHomepage.class);
                     startActivity(intent);
                 } else {
                     // Display an error message if the credentials are incorrect

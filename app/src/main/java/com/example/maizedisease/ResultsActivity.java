@@ -1,8 +1,10 @@
 package com.example.maizedisease;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ public class ResultsActivity extends AppCompatActivity {
     private FungicideAdapter fungicideAdapter;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
+    private ImageView backButton, logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,11 @@ public class ResultsActivity extends AppCompatActivity {
         // Initialize views
         TextView outputTextView = findViewById(R.id.outputTextView);
         fungicideRecyclerView = findViewById(R.id.fungicideRecyclerView);
+        backButton = findViewById(R.id.back_button);
+        logoutButton = findViewById(R.id.logout_button);
+
+        backButton.setOnClickListener(v ->onBack());
+        logoutButton.setOnClickListener(v ->logout());
 
         drawerLayout = findViewById(R.id.drawableLayout);
         if (drawerLayout != null) {
@@ -72,6 +80,16 @@ public class ResultsActivity extends AppCompatActivity {
         fungicideAdapter = new FungicideAdapter(fungicideList);
         fungicideRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         fungicideRecyclerView.setAdapter(fungicideAdapter);
+    }
+
+    private void logout() {
+        Intent intent = new Intent(ResultsActivity.this, SignIn.class);
+        startActivity(intent);
+    }
+
+    private void onBack() {
+        Intent intent = new Intent(ResultsActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

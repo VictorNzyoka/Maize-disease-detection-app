@@ -18,16 +18,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/nav_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/gray1"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
+            android:layout_marginTop="10dp"
             android:text="Maize disease detection"
-            android:textColor="@color/black"
+            android:textColor="@color/green"
             android:textSize="30sp"
             android:textStyle="italic" />
 
@@ -49,5 +58,7 @@
             android:layout_weight="1" />
 
     </LinearLayout>
+    </LinearLayout>
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

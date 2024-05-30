@@ -40,10 +40,10 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:hint="email"
             android:textColorHint="@android:color/black"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edittextbackground"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,7 +63,8 @@
             android:textColor="@color/black"
             android:hint="password"
             android:textColorHint="@android:color/black"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:background="@drawable/edittextbackground"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
+    android:orientation="vertical"
     tools:context=".ChatActivity">
+
+    <include layout="@layout/nav_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="16dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_above="@id/sendMessageLayout"
-        android:layout_alignParentTop="true" />
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp" />
 
     <RelativeLayout
         android:id="@+id/sendMessageLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -31,9 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Write message here"
-            android:padding="12dp"
             android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/sendMessage" />
+            android:layout_toStartOf="@+id/sendMessage"
+            android:padding="12dp" />
 
         <TextView
             android:id="@+id/sendMessage"
@@ -49,4 +50,4 @@
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

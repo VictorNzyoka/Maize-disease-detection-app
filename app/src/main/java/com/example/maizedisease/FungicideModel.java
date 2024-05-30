@@ -6,16 +6,18 @@ import android.os.Parcelable;
 public class FungicideModel implements Parcelable {
     private int imageResource;
     private String name;
-    private String discription;
+    private String description;
 
-    public FungicideModel(int imageResource, String name) {
+    public FungicideModel(int imageResource, String name, String description) {
         this.imageResource = imageResource;
         this.name = name;
+        this.description = description;
     }
 
     protected FungicideModel(Parcel in) {
         imageResource = in.readInt();
         name = in.readString();
+        description = in.readString();
     }
 
     public static final Creator<FungicideModel> CREATOR = new Creator<FungicideModel>() {
@@ -38,6 +40,10 @@ public class FungicideModel implements Parcelable {
         return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -47,5 +53,6 @@ public class FungicideModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(imageResource);
         dest.writeString(name);
+        dest.writeString(description);
     }
 }

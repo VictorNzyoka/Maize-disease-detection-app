@@ -1,13 +1,12 @@
 package com.example.maizedisease;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,38 +18,35 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterPage extends AppCompatActivity {
+public class RegisterOfficerActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterPage";
+    private static final String TAG = "RegisterOfficerActivity";
+    private static final String USER_TYPE = "officer";
 
-    private EditText emailEditText, usernameEditText, phoneNumberEditText, passwordEditText;
-    private RadioGroup userTypeGroup;
-    private RadioButton farmerRadioButton, officerRadioButton;
+    private EditText emailEditText, usernameEditText, phoneNumberEditText, officerLocationEditText, experienceEditText, passwordEditText;
     private Button submitButton;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference farmersRef, officersRef;
+    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_page);
+        setContentView(R.layout.activity_register_officer);
 
         // Initialize Firebase instances
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        farmersRef = firebaseDatabase.getReference("farmers");
-        officersRef = firebaseDatabase.getReference("officers");
+        usersRef = firebaseDatabase.getReference("users");
 
         // Find views by their IDs
         emailEditText = findViewById(R.id.email);
         usernameEditText = findViewById(R.id.username);
         phoneNumberEditText = findViewById(R.id.phone_number);
+        officerLocationEditText = findViewById(R.id.officerLocation);
+        experienceEditText = findViewById(R.id.experience);
         passwordEditText = findViewById(R.id.password);
-        userTypeGroup = findViewById(R.id.user_type_group);
-        farmerRadioButton = findViewById(R.id.farmer_radio_btn);
-        officerRadioButton = findViewById(R.id.officer_radio_btn);
         submitButton = findViewById(R.id.submit);
 
         // Set click listener for the submit button
@@ -58,7 +54,7 @@ public class RegisterPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validateInput()) {
-                    registerUser();
+                    registerUser(USER_TYPE);
                 }
             }
         });
@@ -68,6 +64,8 @@ public class RegisterPage extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String username = usernameEditText.getText().toString().trim();
         String phoneNumber = phoneNumberEditText.getText().toString().trim();
+        String officerLocation = officerLocationEditText.getText().toString().trim();
+        String experience = experienceEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
         // Validate email format
@@ -84,7 +82,7 @@ public class RegisterPage extends AppCompatActivity {
             return false;
         }
 
-        // Validate username and phone number
+        // Validate username, phone number, location, and experience
         if (TextUtils.isEmpty(username)) {
             usernameEditText.setError("Username is required");
             usernameEditText.requestFocus();
@@ -97,27 +95,28 @@ public class RegisterPage extends AppCompatActivity {
             return false;
         }
 
-        // Validate radio button selection
-        if (userTypeGroup.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "Please select user type", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(officerLocation)) {
+            officerLocationEditText.setError("Location is required");
+            officerLocationEditText.requestFocus();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(experience)) {
+            experienceEditText.setError("Experience is required");
+            experienceEditText.requestFocus();
             return false;
         }
 
         return true;
     }
 
-    private void registerUser() {
+    private void registerUser(String userType) {
         String email = emailEditText.getText().toString().trim();
         String username = usernameEditText.getText().toString().trim();
         String phoneNumber = phoneNumberEditText.getText().toString().trim();
+        String officerLocation = officerLocationEditText.getText().toString().trim();
+        int experience = Integer.parseInt(experienceEditText.getText().toString().trim());
         String password = passwordEditText.getText().toString().trim();
-        String userType = farmerRadioButton.isChecked() ? "farmer" : officerRadioButton.isChecked() ? "officer" : null;
-
-        // Check if user type is selected
-        if (userType == null) {
-            Toast.makeText(RegisterPage.this, "Please select user type", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // Create user account in Firebase Authentication
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -125,12 +124,12 @@ public class RegisterPage extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // User account created successfully
                         String userId = task.getResult().getUser().getUid();
-                        Log.d(TAG, "User registered successfully: " + userId);
-                        Toast.makeText(RegisterPage.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Officer registered successfully: " + userId);
+                        Toast.makeText(RegisterOfficerActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
 
-                        // Store user data in Firebase Realtime Database
-                        RegistrationModel registrationModel = new RegistrationModel(userId, username, email, phoneNumber, userType, password);
-                        storeUserData(registrationModel);
+                        // Store officer data in Firebase Realtime Database
+                        OfficerModel officerModel = new OfficerModel(userId, username, email, phoneNumber, officerLocation, experience, userType);
+                        storeUserData(officerModel);
                     } else {
                         // User registration failed
                         handleRegistrationFailure(task.getException());
@@ -138,27 +137,15 @@ public class RegisterPage extends AppCompatActivity {
                 });
     }
 
-    private void storeUserData(RegistrationModel registrationModel) {
-        String userId = registrationModel.getUserId();
-        String userType = registrationModel.getUserType();
-
-        DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
-        UserModel userModel = new UserModel(userId, registrationModel.getUsername(), registrationModel.getEmail(), registrationModel.getPhoneNumber(), userType);
-
-        userRef.setValue(userModel).addOnCompleteListener(task -> {
+    private void storeUserData(OfficerModel officerModel) {
+        String userId = officerModel.getUserId();
+        usersRef.child(userId).setValue(officerModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "User data stored successfully");
             } else {
                 Log.e(TAG, "Failed to store user data", task.getException());
             }
         });
-
-        // Store user data under farmers or officers node based on userType
-        if (userType.equals("farmer")) {
-            farmersRef.child(userId).setValue(userModel);
-        } else {
-            officersRef.child(userId).setValue(userModel);
-        }
     }
 
     private void handleRegistrationFailure(Exception exception) {
@@ -172,13 +159,13 @@ public class RegisterPage extends AppCompatActivity {
             emailEditText.requestFocus();
         } catch (FirebaseAuthUserCollisionException e) {
             // This user already exists, handle appropriately
-            Toast.makeText(RegisterPage.this, "User already exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterOfficerActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             // Log the exception and stack trace
             Log.e(TAG, "Registration failed", e);
 
             // Display an error message
-            Toast.makeText(RegisterPage.this, "Registration failed: " + e.getMessage(),
+            Toast.makeText(RegisterOfficerActivity.this, "Registration failed: " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
     }

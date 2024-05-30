@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:padding="40dp"
     android:orientation="vertical"
-    tools:context=".RegisterPage"
-    android:background="@color/gray1">
+    tools:context=".RegisterOfficerActivity"
+    android:background="@color/light_gray">
 
     <TextView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Farmer / Officer"
+        android:text="Add Officer"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle=""/>
@@ -39,8 +39,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:hint="email"
-            android:textColorHint="@android:color/black"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,8 +57,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:hint="username"
-            android:textColorHint="@android:color/black"
-            android:inputType="text"/>
+            android:inputType="text"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,9 +74,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:hint="phone_number"
-            android:textColorHint="@android:color/black"
-            android:inputType="phone"/>
+            android:hint="phone number"
+            android:inputType="phone"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/officerLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:hint="Location (Nyeri)"
+            android:inputType="text"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:hint="Years of experience"
+            android:inputType="number"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,45 +127,10 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:hint="password"
-            android:textColorHint="@android:color/black"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- User type radio buttons -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User Type"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"/>
-
-    <RadioGroup
-        android:id="@+id/user_type_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/farmer_radio_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Farmer"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:layout_marginRight="20dp"/>
-
-        <RadioButton
-            android:id="@+id/officer_radio_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Officer"
-            android:textSize="20sp"
-            android:textColor="@color/black" />
-
-    </RadioGroup>
 
     <Button
         android:id="@+id/submit"

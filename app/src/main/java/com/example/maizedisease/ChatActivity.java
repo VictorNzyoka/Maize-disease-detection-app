@@ -1,8 +1,10 @@
 package com.example.maizedisease;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import java.util.UUID;
 public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
     private ActivityChatBinding binding;
+    private ImageView backButton, logoutButton;
     private String receiverUserId;
     private DatabaseReference databaseReferenceSender, databaseReferenceReceiver;
     private String senderRoom, receiverRoom;
@@ -35,6 +38,12 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        backButton = findViewById(R.id.back_button);
+        logoutButton = findViewById(R.id.logout_button);
+
+        backButton.setOnClickListener(v ->onBack());
+        logoutButton.setOnClickListener(v ->logout());
 
         // Get the receiver's userId from the intent
         receiverUserId = getIntent().getStringExtra("userId");
@@ -87,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String message, String senderUserId, String receiverUserId) { // Use userId instead of username
+    private void sendMessage(String message, String senderUserId, String receiverUserId) {
         if (senderUserId != null && !senderUserId.isEmpty()) {
             String messageId = UUID.randomUUID().toString();
             MessageModel messageModel = new MessageModel(messageId, senderUserId, message);
@@ -103,5 +112,13 @@ public class ChatActivity extends AppCompatActivity {
             Log.e(TAG, "senderUserId is not available");
             // You can show an error message to the user or take other appropriate actions
         }
+    }
+    private void logout() {
+        Intent intent = new Intent(ChatActivity.this, SignIn.class);
+        startActivity(intent);
+    }
+    public void onBack() {
+        Intent intent = new Intent(ChatActivity.this, MessageActivity.class);
+        startActivity(intent);
     }
 }

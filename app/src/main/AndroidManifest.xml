@@ -17,6 +17,15 @@
         android:theme="@style/Theme.MaizeDisease"
         tools:targetApi="31">
         <activity
+            android:name=".RegisterFarmerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterOfficerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminHomepage"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
@@ -27,9 +36,6 @@
             android:exported="false" />
         <activity
             android:name=".SignIn"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterPage"
             android:exported="false" />
         <activity
             android:name=".AdminLogin"

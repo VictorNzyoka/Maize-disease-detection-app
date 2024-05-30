@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    >
 
     <ImageView
         android:id="@+id/fungicideImageView"
@@ -18,15 +18,16 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
         android:textSize="24sp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/green"/>
 
     <TextView
-        android:id="@+id/discriptionTextView"
+        android:id="@+id/fungicideDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
         android:textSize="24sp"
         android:textColor="@color/black"/>
+
 
 </LinearLayout>

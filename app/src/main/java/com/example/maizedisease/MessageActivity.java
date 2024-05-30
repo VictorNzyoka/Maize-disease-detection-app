@@ -1,7 +1,9 @@
 package com.example.maizedisease;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ public class MessageActivity extends AppCompatActivity {
     private DatabaseReference farmersReference, officersReference;
     private UserAdapter userAdapter;
     private String currentUserType;
+    private ImageView backButton, logoutButton;
     private FirebaseUser currentUser;
     private Set<String> userIds;
 
@@ -42,6 +45,11 @@ public class MessageActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(this);
         binding.recycler.setAdapter(userAdapter);
         binding.recycler.setLayoutManager(new LinearLayoutManager(this));
+        backButton = findViewById(R.id.back_button);
+        logoutButton = findViewById(R.id.logout_button);
+
+        backButton.setOnClickListener(v ->onBack());
+        logoutButton.setOnClickListener(v ->logout());
 
         // Add item decoration for spacing
         binding.recycler.addItemDecoration(new SpacesItemDecoration(20, 20));
@@ -151,4 +159,14 @@ public class MessageActivity extends AppCompatActivity {
     private void showErrorToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+    private void logout() {
+        Intent intent = new Intent(MessageActivity.this, SignIn.class);
+        startActivity(intent);
+    }
+
+    private void onBack() {
+        Intent intent = new Intent(MessageActivity.this, SignIn.class);
+        startActivity(intent);
+    }
+
 }
